@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Smart Node Configurator</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <?!= include('CSS'); ?>
+
+</head>
+
+<body>
+
+<div class="mainContainer">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+
+            <span class="material-icons">
+                home
+            </span>
+
+            <div>
+
+                <h2>Smart Node Configurator</h2>
+
+                <p>Create your Smart Home</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Progress -->
+
+    <div class="stepper">
+
+        <div class="step active">
+
+            <div class="circle">1</div>
+
+            <span>Customer</span>
+
+        </div>
+
+        <div class="line"></div>
+
+        <div class="step">
+
+            <div class="circle">2</div>
+
+            <span>House</span>
+
+        </div>
+
+        <div class="line"></div>
+
+        <div class="step">
+
+            <div class="circle">3</div>
+
+            <span>Package</span>
+
+        </div>
+
+        <div class="line"></div>
+
+        <div class="step">
+
+            <div class="circle">4</div>
+
+            <span>Rooms</span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CUSTOMER DETAILS -->
+
+    <div class="card">
+
+        <h3>
+
+            Customer Details
+
+        </h3>
+
+        <div class="formGrid">
+
+            <div class="formGroup">
+
+                <label>
+
+                    Mobile Number
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="mobile"
+
+                    placeholder="Enter Mobile Number"
+
+                >
+
+            </div>
+
+
+
+            <div class="formGroup">
+
+                <label>
+
+                    City
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="city"
+
+                    placeholder="Enter City"
+
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <div class="buttonRow">
+
+            <button
+
+                class="primaryButton"
+
+                onclick="searchCustomer()">
+
+                Search / Continue
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HOUSE TYPE -->
+
+    <div class="card">
+
+        <h3>
+
+            Select House Type
+
+        </h3>
+
+        <div class="houseGrid">
+
+            <div
+
+                class="houseCard"
+
+                onclick="selectHouse('1 BHK')">
+
+                <span class="material-icons">
+
+                    apartment
+
+                </span>
+
+                <h2>
+
+                    1 BHK
+
+                </h2>
+
+            </div>
+
+
+
+            <div
+
+                class="houseCard"
+
+                onclick="selectHouse('2 BHK')">
+
+                <span class="material-icons">
+
+                    apartment
+
+                </span>
+
+                <h2>
+
+                    2 BHK
+
+                </h2>
+
+            </div>
+
+
+
+            <div
+
+                class="houseCard"
+
+                onclick="openHousePopup()">
+
+                <span class="material-icons">
+
+                    holiday_village
+
+                </span>
+
+                <h2>
+
+                    3 / 4 / 5 BHK
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HOUSE POPUP -->
+
+    <div
+
+        id="housePopup"
+
+        class="popup">
+
+        <div class="popupContent">
+
+            <h3>
+
+                Select House
+
+            </h3>
+
+            <button onclick="selectHouse('3 BHK')">
+
+                3 BHK
+
+            </button>
+
+            <button onclick="selectHouse('4 BHK')">
+
+                4 BHK
+
+            </button>
+
+            <button onclick="selectHouse('5 BHK')">
+
+                5 BHK
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PACKAGE -->
+
+    <div class="card">
+
+        <h3>
+
+            Select Package
+
+        </h3>
+
+        <div class="packageGrid">
+
+            <div
+
+                class="packageCard"
+
+                onclick="selectPackage('Basic')">
+
+                <h2>
+
+                    BASIC
+
+                </h2>
+
+<h1 id="basicAmount">₹ 0</h1>
+
+                <p>
+
+                    Estimated Amount
+
+                </p>
+
+            </div>
+
+
+
+            <div
+
+                class="packageCard"
+
+                onclick="selectPackage('Economy')">
+
+                <h2>
+
+                    ECONOMY
+
+                </h2>
+
+<h1 id="economyAmount">₹ 0</h1>
+
+                <p>
+
+                    Estimated Amount
+
+                </p>
+
+            </div>
+
+
+
+            <div
+
+                class="packageCard"
+
+                onclick="selectPackage('Premium')">
+
+                <h2>
+
+                    PREMIUM
+
+                </h2>
+
+<h1 id="premiumAmount">₹ 0</h1>
+
+                <p>
+
+                    Estimated Amount
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- CONFIGURATION -->
+
+<div class="card">
+
+    <h3>
+        Configure Your Home
+    </h3>
+
+    <div
+        id="roomContainer"
+        class="roomGrid">
+
+    </div>
+
+</div>
+    <div class="bottomBar">
+
+        <div>
+
+            <small>Estimated Amount</small>
+
+            <h2 id="totalAmount">₹ 0</h2>
+
+        </div>
+
+<button
+    class="primaryButton"
+    onclick="saveConfiguration()">
+
+    Save Configuration
+
+</button>
+
+    </div>
+
+</div>
+
+<?!= include('JS'); ?>
+
+</body>
+
+</html>
