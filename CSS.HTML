@@ -1,0 +1,413 @@
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#2d3436;
+}
+
+.mainContainer{
+    width:95%;
+    max-width:1500px;
+    margin:30px auto 120px;
+}
+
+.header{
+    background:#ffffff;
+    border-radius:16px;
+    padding:20px 30px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo .material-icons{
+    font-size:42px;
+    color:#1565C0;
+}
+
+.logo h2{
+    font-size:28px;
+    color:#1565C0;
+    font-weight:700;
+}
+
+.logo p{
+    color:#666;
+    font-size:14px;
+}
+
+.stepper{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:30px;
+}
+
+.step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#dfe6e9;
+    color:#666;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.step.active .circle{
+    background:#1565C0;
+    color:#fff;
+}
+
+.step span{
+    margin-top:8px;
+    font-size:13px;
+}
+
+.line{
+    width:90px;
+    height:3px;
+    background:#dfe6e9;
+    margin:0 15px;
+}
+
+.card{
+    background:#ffffff;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.card h3{
+    margin-bottom:20px;
+    color:#1565C0;
+}
+
+.formGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.formGroup{
+    display:flex;
+    flex-direction:column;
+}
+
+.formGroup label{
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.formGroup input{
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.formGroup input:focus{
+    outline:none;
+    border-color:#1565C0;
+}
+
+.buttonRow{
+    margin-top:25px;
+}
+
+.primaryButton{
+    background:#1565C0;
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+.primaryButton:hover{
+    background:#0D47A1;
+}
+
+.houseGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.houseCard{
+    background:#fff;
+    border:2px solid #ECEFF1;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.houseCard:hover{
+    border-color:#1565C0;
+    transform:translateY(-5px);
+}
+
+.houseCard .material-icons{
+    font-size:48px;
+    color:#1565C0;
+    margin-bottom:10px;
+}
+
+.houseCard h2{
+    font-size:22px;
+}
+
+.packageGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.packageCard{
+    border:2px solid #ECEFF1;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.packageCard:hover{
+    border-color:#1565C0;
+    transform:translateY(-5px);
+}
+
+.packageCard h2{
+    color:#1565C0;
+    margin-bottom:20px;
+}
+
+.packageCard h1{
+    font-size:40px;
+    color:#2d3436;
+}
+
+.packageCard p{
+    color:#666;
+    margin-top:10px;
+}
+
+.roomGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    margin-top:20px;
+}
+
+.roomCard{
+    background:#ffffff;
+    border:2px solid #ECEFF1;
+    border-radius:15px;
+    overflow:hidden;
+    transition:0.3s;
+}
+
+.roomCard:hover{
+    border-color:#1565C0;
+    transform:translateY(-4px);
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+}
+
+.roomHeader{
+    background:#1565C0;
+    color:#ffffff;
+    padding:15px 20px;
+    font-size:16px;
+    font-weight:600;
+}
+
+.roomHeader label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.roomHeader input[type="checkbox"]{
+    width:18px;
+    height:18px;
+}
+
+.deviceList{
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.deviceList label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.deviceList input[type="checkbox"]{
+    width:18px;
+    height:18px;
+}
+
+.bottomBar{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    background:#ffffff;
+    box-shadow:0 -4px 12px rgba(0,0,0,.12);
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:999;
+}
+
+.bottomBar small{
+    color:#888;
+    display:block;
+    margin-bottom:4px;
+}
+
+.bottomBar h2{
+    color:#1565C0;
+    font-size:28px;
+}
+
+.popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.popupContent{
+    width:350px;
+    background:#ffffff;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+}
+
+.popupContent h3{
+    margin-bottom:20px;
+    color:#1565C0;
+}
+
+.popupContent button{
+    width:100%;
+    margin-bottom:10px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#1565C0;
+    color:#ffffff;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.popupContent button:hover{
+    background:#0D47A1;
+}
+
+@media(max-width:1024px){
+
+.packageGrid{
+grid-template-columns:1fr;
+}
+
+.houseGrid{
+grid-template-columns:1fr;
+}
+
+.formGrid{
+grid-template-columns:1fr;
+}
+
+.roomGrid{
+grid-template-columns:1fr;
+}
+
+.line{
+display:none;
+}
+
+.stepper{
+flex-wrap:wrap;
+gap:15px;
+}
+
+.bottomBar{
+padding:15px 20px;
+flex-direction:column;
+gap:15px;
+}
+
+.bottomBar button{
+width:100%;
+}
+
+}
+
+.selectedCard{
+    border:3px solid #1565C0 !important;
+    background:#E8F2FF !important;
+    box-shadow:0 8px 18px rgba(21,101,192,.25);
+    transform:translateY(-3px);
+}
+
+.hidden{
+    display:none !important;
+}
+
+.fade{
+    animation:fadeIn .3s ease;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0px);
+}
+
+}
+
+</style>
