@@ -1,0 +1,342 @@
+<script>
+
+let customer = {
+    mobile: "",
+    city: "",
+    bhk: "",
+    package: "",
+    amount: 0
+};
+
+/* ------------------------------
+   CUSTOMER SEARCH
+------------------------------ */
+
+function searchCustomer(){
+
+    customer.mobile = document.getElementById("mobile").value.trim();
+    customer.city = document.getElementById("city").value.trim();
+
+    if(customer.mobile==""){
+
+        alert("Please enter Mobile Number");
+        return;
+
+    }
+
+    google.script.run
+    .withSuccessHandler(loadCustomer)
+    .searchCustomer(customer.mobile);
+
+}
+
+function loadCustomer(data){
+
+    if(data==null){
+
+        alert("New Customer");
+
+        return;
+
+    }
+
+    customer=data;
+
+    document.getElementById("mobile").value=data.mobile;
+    document.getElementById("city").value=data.city;
+
+}
+
+/* ------------------------------
+   HOUSE
+------------------------------ */
+
+function openHousePopup(){
+
+    document.getElementById("housePopup").style.display="flex";
+
+}
+
+function closeHousePopup(){
+
+    document.getElementById("housePopup").style.display="none";
+
+}
+
+function selectHouse(bhk){
+
+    customer.bhk = bhk;
+
+    closeHousePopup();
+
+    document.querySelectorAll(".houseCard").forEach(card=>{
+        card.classList.remove("selectedCard");
+    });
+
+    document.querySelectorAll(".houseCard").forEach(card=>{
+        if(card.innerText.includes(bhk.replace(" BHK",""))){
+            card.classList.add("selectedCard");
+        }
+    });
+
+    google.script.run
+      .withSuccessHandler(loadPackageAmounts)
+      .getPackageAmounts(bhk);
+
+    loadTemplate();
+
+}
+
+/* ------------------------------
+   PACKAGE
+------------------------------ */
+
+function selectPackage(pkg){
+
+    customer.package = pkg;
+
+    document.querySelectorAll(".packageCard").forEach(card=>{
+        card.classList.remove("selectedCard");
+    });
+
+    document.querySelectorAll(".packageCard").forEach(card=>{
+
+        if(card.innerText.toUpperCase().includes(pkg.toUpperCase())){
+
+            card.classList.add("selectedCard");
+
+        }
+
+    });
+
+    loadTemplate();
+
+}
+/* ------------------------------
+   LOAD TEMPLATE
+------------------------------ */
+
+function loadTemplate(){
+
+    if(customer.bhk=="" || customer.package=="")
+        return;
+
+    google.script.run
+        .withSuccessHandler(renderRooms)
+        .loadTemplate(customer.bhk,customer.package);
+
+}
+
+/* ------------------------------
+   CREATE ROOM CARDS
+------------------------------ */
+
+function renderRooms(data){
+
+    let container=document.getElementById("roomContainer");
+
+    container.innerHTML="";
+
+    let total=0;
+
+    data.forEach(room=>{
+
+        let html=`
+
+        <div class="roomCard fade">
+
+            <div class="roomHeader">
+
+                <label>
+
+                    <input
+                        class="roomCheckbox"
+                        type="checkbox"
+                        checked>
+
+                    <b>${room.room}</b>
+
+                </label>
+
+            </div>
+
+            <div class="deviceList">
+
+        `;
+
+        room.devices.forEach(device=>{
+
+            if(device.selected){
+
+                total+=Number(device.amount);
+
+            }
+
+            html+=`
+
+                <label>
+
+                    <input
+
+                        class="deviceCheckbox"
+
+                        data-amount="${device.amount}"
+
+                        type="checkbox"
+
+                        ${device.selected?"checked":""}
+
+                    >
+
+                    ${device.name}
+
+                </label>
+
+            `;
+
+        });
+
+        html+=`
+
+            </div>
+
+        </div>
+
+        `;
+
+        container.innerHTML+=html;
+
+    });
+
+    customer.amount=total;
+
+    updateAmount();
+
+}
+
+/* ------------------------------
+   AMOUNT
+------------------------------ */
+
+function calculateAmount(){
+
+    let total=0;
+
+    document.querySelectorAll(".deviceCheckbox").forEach(device=>{
+
+        if(device.checked){
+
+            total+=Number(device.dataset.amount);
+
+        }
+
+    });
+
+    customer.amount=total;
+
+    updateAmount();
+
+}
+
+function updateAmount(){
+
+    document.getElementById("totalAmount").innerHTML=
+
+        "₹ "+customer.amount.toLocaleString("en-IN");
+
+}
+
+/* ------------------------------
+   CHECKBOX EVENTS
+------------------------------ */
+
+document.addEventListener("change",function(e){
+
+    if(e.target.classList.contains("deviceCheckbox")){
+
+        calculateAmount();
+
+    }
+
+    if(e.target.classList.contains("roomCheckbox")){
+
+        let room=e.target.closest(".roomCard");
+
+        let devices=room.querySelector(".deviceList");
+
+        devices.style.display=e.target.checked ? "block" : "none";
+
+        calculateAmount();
+
+    }
+
+});
+
+/* ------------------------------
+   SAVE
+------------------------------ */
+function loadPackageAmounts(data){
+
+    document.getElementById("basicAmount").innerHTML =
+        "₹ " + (data.Basic || 0).toLocaleString("en-IN");
+
+    document.getElementById("economyAmount").innerHTML =
+        "₹ " + (data.Economy || 0).toLocaleString("en-IN");
+
+    document.getElementById("premiumAmount").innerHTML =
+        "₹ " + (data.Premium || 0).toLocaleString("en-IN");
+
+}
+
+function saveConfiguration(){
+
+    customer.mobile=document.getElementById("mobile").value;
+    customer.city=document.getElementById("city").value;
+
+    let rooms=[];
+
+    document.querySelectorAll(".roomCard").forEach(room=>{
+
+        let roomName=room.querySelector("b").innerText;
+
+        let roomSelected=room.querySelector(".roomCheckbox").checked;
+
+        let devices=[];
+
+        room.querySelectorAll(".deviceCheckbox").forEach(device=>{
+
+            devices.push({
+
+                name:device.parentElement.innerText.trim(),
+
+                selected:device.checked,
+
+                amount:Number(device.dataset.amount)
+
+            });
+
+        });
+
+        rooms.push({
+
+            room:roomName,
+
+            selected:roomSelected,
+
+            devices:devices
+
+        });
+
+    });
+
+    google.script.run
+        .withSuccessHandler(function(){
+
+            alert("Configuration Saved Successfully");
+
+        })
+        .saveConfiguration(customer,rooms);
+
+}
+
+</script>
